@@ -22,6 +22,7 @@ public class CompanyInput
     [Required]
     [MaxLength(7)]
     public string PostalCode { get; set; }
+    
     [MaxLength(60)]
     public string City { get; set; }
 

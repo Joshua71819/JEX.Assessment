@@ -14,16 +14,12 @@ public class CompanyService : ICompanyService
         _companyJobsDbContext = companyJobsDbContext;
     }
 
-    public List<CompanyOverview> GetCompanies(bool retrieveOnlyHiringCompanies) {
+    public List<CompanySummary> GetCompanies(bool retrieveOnlyHiringCompanies) {
         var companyQuery = retrieveOnlyHiringCompanies ? 
             _companyJobsDbContext.Companies.Where(c => c.JobPostings.Any(jp => jp.IsActive)) : 
-            _companyJobsDbContext.Companies.AsQueryable();      
-       
-        return companyQuery.Select(c => new CompanyOverview
-         {
-            Id = c.Id,
-            Name = c.Name,
-        }).ToList();
+            _companyJobsDbContext.Companies.AsQueryable();
+
+        return companyQuery.Select(c => new CompanySummary(c.Id, c.Name)).ToList();
     }
 
     public CompanyDetail GetCompanyDetail(int id, bool includeInactiveJobPostings) =>
