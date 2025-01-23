@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace JEX.Assessment.Data.Migrations
 {
     [DbContext(typeof(CompanyJobsDbContext))]
-    [Migration("20250123125141_InitialMigration")]
+    [Migration("20250123131028_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -53,6 +53,12 @@ namespace JEX.Assessment.Data.Migrations
                         .HasMaxLength(15)
                         .IsUnicode(false)
                         .HasColumnType("varchar(15)");
+
+                    b.Property<string>("PostalCode")
+                        .IsRequired()
+                        .HasMaxLength(7)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(7)");
 
                     b.Property<string>("Street")
                         .IsRequired()

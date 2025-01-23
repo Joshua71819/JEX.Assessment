@@ -51,6 +51,12 @@ namespace JEX.Assessment.Data.Migrations
                         .IsUnicode(false)
                         .HasColumnType("varchar(15)");
 
+                    b.Property<string>("PostalCode")
+                        .IsRequired()
+                        .HasMaxLength(7)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(7)");
+
                     b.Property<string>("Street")
                         .IsRequired()
                         .HasMaxLength(60)

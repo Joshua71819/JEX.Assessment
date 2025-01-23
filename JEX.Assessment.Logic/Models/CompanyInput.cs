@@ -19,6 +19,9 @@ public class CompanyInput
     [MaxLength(10)]
     public string? StreetNumberSuffix { get; set; }
 
+    [Required]
+    [MaxLength(7)]
+    public string PostalCode { get; set; }
     [MaxLength(60)]
     public string City { get; set; }
 

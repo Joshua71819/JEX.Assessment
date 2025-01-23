@@ -20,6 +20,7 @@ namespace JEX.Assessment.Data.Migrations
                     Street = table.Column<string>(type: "varchar(60)", unicode: false, maxLength: 60, nullable: false),
                     StreetNumber = table.Column<int>(type: "int", nullable: false),
                     StreetNumberSuffix = table.Column<string>(type: "varchar(10)", unicode: false, maxLength: 10, nullable: true),
+                    PostalCode = table.Column<string>(type: "varchar(7)", unicode: false, maxLength: 7, nullable: false),
                     City = table.Column<string>(type: "varchar(60)", unicode: false, maxLength: 60, nullable: false),
                     Website = table.Column<string>(type: "varchar(60)", unicode: false, maxLength: 60, nullable: true),
                     Email = table.Column<string>(type: "varchar(30)", unicode: false, maxLength: 30, nullable: true),

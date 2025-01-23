@@ -25,6 +25,7 @@ public class JobPostingService : IJobPostingService
             MaxMonthlySalary = jobPostingInput.MaxMonthlySalary,
             MinHoursPerWeek = jobPostingInput.MinHoursPerWeek,
             MaxHoursPerWeek = jobPostingInput.MaxHoursPerWeek,
+            IsActive = true
         };
 
         _companyJobsDbContext.JobPostings.Add(jobPosting);
