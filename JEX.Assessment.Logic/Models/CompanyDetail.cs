@@ -1,11 +1,15 @@
-﻿namespace JEX.Assessment.Logic.Models;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace JEX.Assessment.Logic.Models;
 
 public class CompanyDetail
 {
     public int Id { get; set; }
     public string Name { get; set; }
-    public string Street { get; set; }
-    public int StreetNumber { get; set; }
-    public string? StreetNumberSuffix { get; set; }
+    public string Address { get; set; }
     public string City { get; set; }
+    public string? Website { get; set; }
+    public string? Email { get; set; }
+    public string? PhoneNumber { get; set; }
+    public JobPostingSummary[] OpenJobPostings { get; set; }
 }

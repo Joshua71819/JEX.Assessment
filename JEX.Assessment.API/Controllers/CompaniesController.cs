@@ -16,17 +16,32 @@ public class CompaniesController : ControllerBase
     }
 
     [HttpGet]
-    public List<CompanyOverview> GetCompanies() => _companyService.GetCompanies();
+    public ActionResult<List<CompanyOverview>> GetCompanies() => _companyService.GetCompanies(retrieveOnlyHiringCompanies: false);
 
-    [HttpGet("/hiring")]
-    public List<CompanyOverview> GetCompaniesWithOpenJobPostings() => _companyService.GetCompaniesWithOpenPostings();
+    [HttpGet("hiring")]
+    public ActionResult<List<CompanyOverview>> GetCompaniesWithOpenJobPostings() => _companyService.GetCompanies(retrieveOnlyHiringCompanies: true);
 
-    [HttpGet("{id}")]
-    public CompanyDetail GetCompany(int id) => _companyService.GetCompanyDetail(id);
+    [HttpGet("{id}/{includeInactiveJobPostings")]
+    public ActionResult<CompanyDetail> GetCompany(int id) => _companyService.GetCompanyDetail(id);
 
     [HttpPost]
-    public void AddCompany([FromBody] CompanyInput company)
+    public ActionResult<int> AddCompany([FromBody] CompanyInput company)
     {
-        // Add company to database
+        var companyId = _companyService.AddCompany(company);
+        return CreatedAtAction(nameof(AddCompany), companyId);
+    }
+
+    [HttpPut("{id}")]
+    public ActionResult<int> UpdateCompany(int id, [FromBody] CompanyInput company)
+    {
+        _companyService.UpdateCompany(id, company);
+        return Ok();
+    }
+
+    [HttpDelete("{id}")]
+    public ActionResult<int> DeleteCompany(int id)
+    {
+        _companyService.DeleteCompany(id);
+        return Ok();
     }
 }

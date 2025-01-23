@@ -1,6 +1,7 @@
 ﻿using JEX.Assessment.Data;
 using JEX.Assessment.Data.Entities;
 using JEX.Assessment.Logic.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace JEX.Assessment.Logic.Services;
 
@@ -13,33 +14,33 @@ public class CompanyService : ICompanyService
         _companyJobsDbContext = companyJobsDbContext;
     }
 
-    public List<CompanyOverview> GetCompanies() =>
-       _companyJobsDbContext.Companies.Select(c => new CompanyOverview
-       {
-           Id = c.Id,
-           Name = c.Name
-       }).ToList();
-
-    public List<CompanyOverview> GetCompaniesWithOpenPostings() =>
-       _companyJobsDbContext.Companies
-        .Where(c => c.JobPostings.Any(jp => jp.IsActive))
-        .Select(c => new CompanyOverview
-        {
-            Id = c.Id,
-            Name = c.Name
-        }).ToList();
-
-    public CompanyDetail GetCompanyDetail(int companyId) => _companyJobsDbContext.Companies
-        .Where(c => c.Id == companyId)
-        .Select(c => new CompanyDetail
-        {
+    public List<CompanyOverview> GetCompanies(bool retrieveOnlyHiringCompanies) {
+        var companyQuery = retrieveOnlyHiringCompanies ? 
+            _companyJobsDbContext.Companies.Where(c => c.JobPostings.Any(jp => jp.IsActive)) : 
+            _companyJobsDbContext.Companies.AsQueryable();      
+       
+        return companyQuery.Select(c => new CompanyOverview
+         {
             Id = c.Id,
             Name = c.Name,
-            Street = c.Street,
-            StreetNumber = c.StreetNumber,
-            StreetNumberSuffix = c.StreetNumberSuffix,
-            City = c.City,
-        }).First();
+        }).ToList();
+    }
+
+    public CompanyDetail GetCompanyDetail(int id) =>
+        _companyJobsDbContext.Companies
+            .Where(c => c.Id == id)
+            .Select(c => new CompanyDetail
+            {
+                Id = c.Id,
+                Name = c.Name,
+                Address = $"{c.Street} {c.StreetNumber}{c.StreetNumberSuffix}",
+                Website = c.Website,
+                Email = c.Email,
+                PhoneNumber = c.PhoneNumber,
+                City = c.City,
+                OpenJobPostings = c.JobPostings.Where(jp => jp.IsActive).Select(jp => new JobPostingSummary(jp.Id, jp.Title, jp.IsActive)).ToArray()
+            })
+        .FirstOrDefault() ?? throw new InvalidOperationException($"Company with Id {id} does not exists");
 
     public int AddCompany(CompanyInput companyInput)
     {
@@ -54,7 +55,10 @@ public class CompanyService : ICompanyService
             Street = companyInput.Street,
             StreetNumber = companyInput.StreetNumber,
             StreetNumberSuffix = companyInput.StreetNumberSuffix,
-            City = companyInput.City
+            City = companyInput.City,
+            Website = companyInput.Website,
+            Email = companyInput.Email,
+            PhoneNumber = companyInput.PhoneNumber
         };
         
         _companyJobsDbContext.Companies.Add(company);
@@ -63,14 +67,25 @@ public class CompanyService : ICompanyService
         return company.Id;
     }
 
-    public void UpdateCompany(int companyId, CompanyInput companyInput)
+    public void UpdateCompany(int id, CompanyInput companyInput)
     {
-        var company = _companyJobsDbContext.Companies.Find(companyId);
+        var company = _companyJobsDbContext.Companies.Find(id) ??
+            throw new InvalidOperationException($"Company with Id {id} does not exists");
+
         company.Name = companyInput.Name;
         company.Street = companyInput.Street;
         company.StreetNumber = companyInput.StreetNumber;
         company.StreetNumberSuffix = companyInput.StreetNumberSuffix;
         company.City = companyInput.City;
+        company.Website = companyInput.Website;
+        company.Email = companyInput.Email;
+        company.PhoneNumber = companyInput.PhoneNumber;
+
         _companyJobsDbContext.SaveChanges();
     }
+
+    public void DeleteCompany(int id) =>
+        _companyJobsDbContext.Companies
+            .Where(c => c.Id == id)
+            .ExecuteDelete();
 }
