@@ -21,13 +21,6 @@ public class JobPostingsController : ControllerBase
         return Ok(jobPostingDetail);
     }
 
-    [HttpGet("company/{companyId}")]
-    public ActionResult<JobPostingDetail> GetJobPostingsForCompany(int companyId)
-    {
-        var jobPostingDetail = _jobPostingService.GetJobPostingsForCompany(companyId);
-        return Ok(jobPostingDetail);
-    }
-
     [HttpPost]
     public ActionResult<int> CreateJobPosting([FromBody] JobPostingInput jobPostingInput)
     {
@@ -46,6 +39,13 @@ public class JobPostingsController : ControllerBase
     public ActionResult<int> DeleteJobPosting(int id)
     {
         _jobPostingService.DeleteJobPosting(id);
+        return Ok();
+    }
+
+    [HttpPatch("{id}/isActive")]
+    public ActionResult UpdateJobPostingStatus(int id, [FromBody] bool isActive)
+    {
+        _jobPostingService.SetStatus(id, isActive);
         return Ok();
     }
 }

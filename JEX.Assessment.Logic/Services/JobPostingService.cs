@@ -25,25 +25,12 @@ public class JobPostingService : IJobPostingService
             MaxMonthlySalary = jobPostingInput.MaxMonthlySalary,
             MinHoursPerWeek = jobPostingInput.MinHoursPerWeek,
             MaxHoursPerWeek = jobPostingInput.MaxHoursPerWeek,
-            IsActive = true
         };
 
         _companyJobsDbContext.JobPostings.Add(jobPosting);
         _companyJobsDbContext.SaveChanges();
 
         return jobPosting.Id;
-    }
-
-    public List<JobPostingSummary> GetJobPostingsForCompany(int companyId)
-    {
-        if (!_companyJobsDbContext.Companies.Any(c => c.Id == companyId))
-        {
-            throw new InvalidOperationException($"Company with Id {companyId} does not exists");
-        }
-
-        return _companyJobsDbContext.JobPostings.Where(jp => jp.CompanyId == companyId)
-            .Select(jp => new JobPostingSummary(jp.Id, jp.Title, jp.IsActive))
-            .ToList();
     }
 
     public JobPostingDetail GetJobPostingDetail(int id) =>
@@ -75,6 +62,16 @@ public class JobPostingService : IJobPostingService
         jobPosting.MaxMonthlySalary = jobPostingInput.MaxMonthlySalary;
 
         _companyJobsDbContext.SaveChanges();
+    }
+
+    public void SetStatus(int id, bool isActive)
+    {
+        var jobPosting = _companyJobsDbContext.JobPostings.Find(id) ??
+            throw new InvalidOperationException($"Posting with Id {id} does not exists");
+
+        jobPosting.IsActive = isActive;
+        _companyJobsDbContext.SaveChanges();
+
     }
 
     public void DeleteJobPosting(int id) =>

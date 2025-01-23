@@ -26,7 +26,7 @@ public class CompanyService : ICompanyService
         }).ToList();
     }
 
-    public CompanyDetail GetCompanyDetail(int id) =>
+    public CompanyDetail GetCompanyDetail(int id, bool includeInactiveJobPostings) =>
         _companyJobsDbContext.Companies
             .Where(c => c.Id == id)
             .Select(c => new CompanyDetail
@@ -38,7 +38,7 @@ public class CompanyService : ICompanyService
                 Email = c.Email,
                 PhoneNumber = c.PhoneNumber,
                 City = c.City,
-                OpenJobPostings = c.JobPostings.Where(jp => jp.IsActive).Select(jp => new JobPostingSummary(jp.Id, jp.Title, jp.IsActive)).ToArray()
+                JobPostings = c.JobPostings.Where(jp => includeInactiveJobPostings || jp.IsActive).Select(jp => new JobPostingSummary(jp.Id, jp.Title, jp.IsActive)).ToArray()
             })
         .FirstOrDefault() ?? throw new InvalidOperationException($"Company with Id {id} does not exists");
 

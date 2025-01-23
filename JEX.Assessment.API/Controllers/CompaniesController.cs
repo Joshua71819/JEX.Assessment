@@ -21,8 +21,8 @@ public class CompaniesController : ControllerBase
     [HttpGet("hiring")]
     public ActionResult<List<CompanyOverview>> GetCompaniesWithOpenJobPostings() => _companyService.GetCompanies(retrieveOnlyHiringCompanies: true);
 
-    [HttpGet("{id}/{includeInactiveJobPostings")]
-    public ActionResult<CompanyDetail> GetCompany(int id) => _companyService.GetCompanyDetail(id);
+    [HttpGet("{id}")]
+    public ActionResult<CompanyDetail> GetCompany(int id, [FromQuery] bool includeInactiveJobPostings) => _companyService.GetCompanyDetail(id, includeInactiveJobPostings);
 
     [HttpPost]
     public ActionResult<int> AddCompany([FromBody] CompanyInput company)

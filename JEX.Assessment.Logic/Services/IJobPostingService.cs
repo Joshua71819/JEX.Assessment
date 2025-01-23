@@ -6,8 +6,7 @@ public interface IJobPostingService
 {
     public int AddJobPosting (JobPostingInput jobPostingInput);
     public JobPostingDetail GetJobPostingDetail(int id);
-    public List<JobPostingSummary> GetJobPostingsForCompany(int companyId);
-
     void UpdateJobPosting(int id, JobPostingInput company);
     void DeleteJobPosting(int id);
+    void SetStatus(int id, bool isActive);
 }

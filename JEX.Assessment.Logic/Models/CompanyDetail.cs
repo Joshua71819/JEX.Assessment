@@ -11,5 +11,5 @@ public class CompanyDetail
     public string? Website { get; set; }
     public string? Email { get; set; }
     public string? PhoneNumber { get; set; }
-    public JobPostingSummary[] OpenJobPostings { get; set; }
+    public JobPostingSummary[] JobPostings { get; set; }
 }
