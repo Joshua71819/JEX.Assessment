@@ -34,5 +34,5 @@ public class Company
     [MaxLength(15)]
     public string? PhoneNumber { get; set; }
 
-    public ICollection<JobPosting> JobPostings { get; set; } = new List<JobPosting>();
+    public ICollection<JobPosting> JobPostings { get; set; } = [];
 }

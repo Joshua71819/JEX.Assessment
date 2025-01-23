@@ -16,10 +16,7 @@ public class CompaniesController : ControllerBase
     }
 
     [HttpGet]
-    public ActionResult<List<CompanySummary>> GetCompanies() => _companyService.GetCompanies(retrieveOnlyHiringCompanies: false);
-
-    [HttpGet("hiring")]
-    public ActionResult<List<CompanySummary>> GetCompaniesWithOpenJobPostings() => _companyService.GetCompanies(retrieveOnlyHiringCompanies: true);
+    public ActionResult<List<CompanySummary>> GetCompanies([FromQuery] bool onlyHiringCompanies) => _companyService.GetCompanies(onlyHiringCompanies);
 
     [HttpGet("{id}")]
     public ActionResult<CompanyDetail> GetCompany(int id, [FromQuery] bool includeInactiveJobPostings) => _companyService.GetCompanyDetail(id, includeInactiveJobPostings);
