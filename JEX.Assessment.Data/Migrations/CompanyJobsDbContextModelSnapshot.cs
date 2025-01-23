@@ -76,52 +76,6 @@ namespace JEX.Assessment.Data.Migrations
                         .IsUnique();
 
                     b.ToTable("Companies");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            City = "Rotterdam",
-                            Email = "recruitment@jex.nl",
-                            Name = "JEX",
-                            PhoneNumber = "010 300 7869",
-                            Street = "Nassaukade",
-                            StreetNumber = 5,
-                            Website = "http://www.jex.nl"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            City = "Amsterdam",
-                            Email = "jobs@kpmg.nl",
-                            Name = "KPMG",
-                            PhoneNumber = "020 431 6232",
-                            Street = "Hoofdweg",
-                            StreetNumber = 11,
-                            Website = "http://www.kpmg.nl"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            City = "Utrecht",
-                            Email = "werkenbij@coolblue.nl",
-                            Name = "Coolblue",
-                            PhoneNumber = "030 227 5542",
-                            Street = "Dorpslaan",
-                            StreetNumber = 23,
-                            Website = "http://www.coolblue.nl"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            City = "Den Haag",
-                            Email = "careers@capgemini.nl",
-                            Name = "Capgemini",
-                            PhoneNumber = "070 328 2234",
-                            Street = "Noordplein",
-                            StreetNumber = 47,
-                            Website = "http://www.capgemini.nl"
-                        });
                 });
 
             modelBuilder.Entity("JEX.Assessment.Data.Entities.JobPosting", b =>
@@ -167,64 +121,6 @@ namespace JEX.Assessment.Data.Migrations
                     b.HasIndex("CompanyId");
 
                     b.ToTable("JobPostings");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CompanyId = 1,
-                            Description = "We zijn op zoek naar een ervaren backend developer die ervaring heeft met MassTransit.",
-                            IsActive = true,
-                            Title = "Backend Developer"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CompanyId = 1,
-                            Description = "We zoeken naar een gedreven frontend developer waar Angular geen geheimen voor heeft!",
-                            IsActive = true,
-                            Title = "Frontend Developer"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            CompanyId = 1,
-                            Description = "Word jij onze nieuwe tester? Soliciteer maar gauw!",
-                            IsActive = false,
-                            Title = "Software Tester"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            CompanyId = 2,
-                            Description = "Heb jij kwaliteit hoog in het vaandel staan? Dan zoeken we jou!",
-                            IsActive = true,
-                            Title = "QA inspecteur"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            CompanyId = 2,
-                            Description = "We zoeken naar iemand met ruime ervaring als DB-beheerder",
-                            IsActive = false,
-                            Title = "Database beheerder"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            CompanyId = 3,
-                            Description = "Kom werken in ons magazijn!",
-                            IsActive = false,
-                            Title = "Magazijnmedewerker"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            CompanyId = 3,
-                            Description = "Adviseer onze klanten speakers en hifi",
-                            IsActive = false,
-                            Title = "Audiospecialist"
-                        });
                 });
 
             modelBuilder.Entity("JEX.Assessment.Data.Entities.JobPosting", b =>

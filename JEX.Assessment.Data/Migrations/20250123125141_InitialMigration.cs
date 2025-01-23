@@ -2,8 +2,6 @@
 
 #nullable disable
 
-#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
-
 namespace JEX.Assessment.Data.Migrations
 {
     /// <inheritdoc />
@@ -56,31 +54,6 @@ namespace JEX.Assessment.Data.Migrations
                         principalTable: "Companies",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.InsertData(
-                table: "Companies",
-                columns: new[] { "Id", "City", "Email", "Name", "PhoneNumber", "Street", "StreetNumber", "StreetNumberSuffix", "Website" },
-                values: new object[,]
-                {
-                    { 1, "Rotterdam", "recruitment@jex.nl", "JEX", "010 300 7869", "Nassaukade", 5, null, "http://www.jex.nl" },
-                    { 2, "Amsterdam", "jobs@kpmg.nl", "KPMG", "020 431 6232", "Hoofdweg", 11, null, "http://www.kpmg.nl" },
-                    { 3, "Utrecht", "werkenbij@coolblue.nl", "Coolblue", "030 227 5542", "Dorpslaan", 23, null, "http://www.coolblue.nl" },
-                    { 4, "Den Haag", "careers@capgemini.nl", "Capgemini", "070 328 2234", "Noordplein", 47, null, "http://www.capgemini.nl" }
-                });
-
-            migrationBuilder.InsertData(
-                table: "JobPostings",
-                columns: new[] { "Id", "CompanyId", "Description", "IsActive", "MaxHoursPerWeek", "MaxMonthlySalary", "MinHoursPerWeek", "MinMonthlySalary", "Title" },
-                values: new object[,]
-                {
-                    { 1, 1, "We zijn op zoek naar een ervaren backend developer die ervaring heeft met MassTransit.", true, null, null, null, null, "Backend Developer" },
-                    { 2, 1, "We zoeken naar een gedreven frontend developer waar Angular geen geheimen voor heeft!", true, null, null, null, null, "Frontend Developer" },
-                    { 3, 1, "Word jij onze nieuwe tester? Soliciteer maar gauw!", false, null, null, null, null, "Software Tester" },
-                    { 4, 2, "Heb jij kwaliteit hoog in het vaandel staan? Dan zoeken we jou!", true, null, null, null, null, "QA inspecteur" },
-                    { 5, 2, "We zoeken naar iemand met ruime ervaring als DB-beheerder", false, null, null, null, null, "Database beheerder" },
-                    { 6, 3, "Kom werken in ons magazijn!", false, null, null, null, null, "Magazijnmedewerker" },
-                    { 7, 3, "Adviseer onze klanten speakers en hifi", false, null, null, null, null, "Audiospecialist" }
                 });
 
             migrationBuilder.CreateIndex(
