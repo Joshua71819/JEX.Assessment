@@ -14,16 +14,17 @@ public class CompanyService : ICompanyService
         _companyJobsDbContext = companyJobsDbContext;
     }
 
-    public List<CompanySummary> GetCompanies(bool retrieveOnlyHiringCompanies) {
-        var companyQuery = retrieveOnlyHiringCompanies ? 
-            _companyJobsDbContext.Companies.Where(c => c.JobPostings.Any(jp => jp.IsActive)) : 
+    public async Task<List<CompanySummary>> GetCompanies(bool retrieveOnlyHiringCompanies)
+    {
+        var companyQuery = retrieveOnlyHiringCompanies ?
+            _companyJobsDbContext.Companies.Where(c => c.JobPostings.Any(jp => jp.IsActive)) :
             _companyJobsDbContext.Companies.AsQueryable();
 
-        return companyQuery.Select(c => new CompanySummary(c.Id, c.Name)).ToList();
+        return await companyQuery.Select(c => new CompanySummary(c.Id, c.Name)).ToListAsync();
     }
 
-    public CompanyDetail GetCompanyDetail(int id, bool includeInactiveJobPostings) =>
-        _companyJobsDbContext.Companies
+    public async Task<CompanyDetail> GetCompanyDetail(int id, bool includeInactiveJobPostings) =>
+        await _companyJobsDbContext.Companies
             .Where(c => c.Id == id)
             .Select(c => new CompanyDetail
             {
@@ -37,11 +38,11 @@ public class CompanyService : ICompanyService
                 City = c.City,
                 JobPostings = c.JobPostings.Where(jp => includeInactiveJobPostings || jp.IsActive).Select(jp => new JobPostingSummary(jp.Id, jp.Title, jp.IsActive)).ToArray()
             })
-        .FirstOrDefault() ?? throw new InvalidOperationException($"Company with Id {id} does not exists");
+        .FirstOrDefaultAsync() ?? throw new InvalidOperationException($"Company with Id {id} does not exists");
 
-    public int AddCompany(CompanyInput companyInput)
+    public async Task<int> AddCompany(CompanyInput companyInput)
     {
-        if (_companyJobsDbContext.Companies.Any(c => c.Name == companyInput.Name))
+        if (await _companyJobsDbContext.Companies.AnyAsync(c => c.Name == companyInput.Name))
         {
             throw new InvalidOperationException("Company with this name already exists");
         }
@@ -58,16 +59,16 @@ public class CompanyService : ICompanyService
             Email = companyInput.Email,
             PhoneNumber = companyInput.PhoneNumber
         };
-        
+
         _companyJobsDbContext.Companies.Add(company);
-        _companyJobsDbContext.SaveChanges();
+        await _companyJobsDbContext.SaveChangesAsync();
 
         return company.Id;
     }
 
-    public void UpdateCompany(int id, CompanyInput companyInput)
+    public async Task UpdateCompany(int id, CompanyInput companyInput)
     {
-        var company = _companyJobsDbContext.Companies.Find(id) ??
+        var company = await _companyJobsDbContext.Companies.FindAsync(id) ??
             throw new InvalidOperationException($"Company with Id {id} does not exists");
 
         company.Name = companyInput.Name;
@@ -79,11 +80,11 @@ public class CompanyService : ICompanyService
         company.Email = companyInput.Email;
         company.PhoneNumber = companyInput.PhoneNumber;
 
-        _companyJobsDbContext.SaveChanges();
+        await _companyJobsDbContext.SaveChangesAsync();
     }
 
-    public void DeleteCompany(int id) =>
-        _companyJobsDbContext.Companies
+    public async Task DeleteCompany(int id) =>
+        await _companyJobsDbContext.Companies
             .Where(c => c.Id == id)
-            .ExecuteDelete();
+            .ExecuteDeleteAsync();
 }

@@ -15,37 +15,37 @@ public class JobPostingsController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public ActionResult<JobPostingDetail> GetJobPosting(int id)
+    public async Task<ActionResult<JobPostingDetail>> GetJobPosting(int id)
     {
-        var jobPostingDetail = _jobPostingService.GetJobPostingDetail(id);
+        var jobPostingDetail = await _jobPostingService.GetJobPostingDetail(id);
         return Ok(jobPostingDetail);
     }
 
     [HttpPost]
-    public ActionResult<int> CreateJobPosting([FromBody] JobPostingInput jobPostingInput)
+    public async Task<ActionResult<int>> CreateJobPosting([FromBody] JobPostingInput jobPostingInput)
     {
-        var jobPostingId = _jobPostingService.AddJobPosting(jobPostingInput);
+        var jobPostingId = await _jobPostingService.AddJobPosting(jobPostingInput);
         return CreatedAtAction(nameof(CreateJobPosting), jobPostingId);
     }
 
     [HttpPut("{id}")]
-    public ActionResult<int> UpdateJobPosting(int id, [FromBody] JobPostingInput jobPostingInput)
+    public async Task<ActionResult<int>> UpdateJobPosting(int id, [FromBody] JobPostingInput jobPostingInput)
     {
-        _jobPostingService.UpdateJobPosting(id, jobPostingInput);
+        await _jobPostingService.UpdateJobPosting(id, jobPostingInput);
         return Ok();
     }
 
     [HttpDelete("{id}")]
-    public ActionResult<int> DeleteJobPosting(int id)
+    public async Task<ActionResult<int>> DeleteJobPosting(int id)
     {
-        _jobPostingService.DeleteJobPosting(id);
+        await _jobPostingService.DeleteJobPosting(id);
         return Ok();
     }
 
     [HttpPatch("{id}/isActive")]
-    public ActionResult UpdateJobPostingStatus(int id, [FromBody] bool isActive)
+    public async Task<ActionResult> UpdateJobPostingStatus(int id, [FromBody] bool isActive)
     {
-        _jobPostingService.SetStatus(id, isActive);
+        await _jobPostingService.SetStatus(id, isActive);
         return Ok();
     }
 }

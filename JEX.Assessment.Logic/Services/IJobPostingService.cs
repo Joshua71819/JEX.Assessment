@@ -4,9 +4,9 @@ namespace JEX.Assessment.Logic.Services;
 
 public interface IJobPostingService
 {
-    public int AddJobPosting (JobPostingInput jobPostingInput);
-    public JobPostingDetail GetJobPostingDetail(int id);
-    void UpdateJobPosting(int id, JobPostingInput company);
-    void DeleteJobPosting(int id);
-    void SetStatus(int id, bool isActive);
+    public Task<int> AddJobPosting(JobPostingInput jobPostingInput);
+    public Task<JobPostingDetail> GetJobPostingDetail(int id);
+    Task UpdateJobPosting(int id, JobPostingInput company);
+    Task DeleteJobPosting(int id);
+    Task SetStatus(int id, bool isActive);
 }

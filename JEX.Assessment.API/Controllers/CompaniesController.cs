@@ -16,22 +16,22 @@ public class CompaniesController : ControllerBase
     }
 
     [HttpGet]
-    public ActionResult<List<CompanySummary>> GetCompanies([FromQuery] bool onlyHiringCompanies) => _companyService.GetCompanies(onlyHiringCompanies);
+    public async Task<ActionResult<List<CompanySummary>>> GetCompanies([FromQuery] bool onlyHiringCompanies) => await _companyService.GetCompanies(onlyHiringCompanies);
 
     [HttpGet("{id}")]
-    public ActionResult<CompanyDetail> GetCompany(int id, [FromQuery] bool includeInactiveJobPostings) => _companyService.GetCompanyDetail(id, includeInactiveJobPostings);
+    public async Task<ActionResult<CompanyDetail>> GetCompany(int id, [FromQuery] bool includeInactiveJobPostings) => await _companyService.GetCompanyDetail(id, includeInactiveJobPostings);
 
     [HttpPost]
-    public ActionResult<int> AddCompany([FromBody] CompanyInput company)
+    public async Task<ActionResult<int>> AddCompany([FromBody] CompanyInput company)
     {
-        var companyId = _companyService.AddCompany(company);
+        var companyId = await _companyService.AddCompany(company);
         return CreatedAtAction(nameof(AddCompany), companyId);
     }
 
     [HttpPut("{id}")]
-    public ActionResult<int> UpdateCompany(int id, [FromBody] CompanyInput company)
+    public async Task<ActionResult<int>> UpdateCompany(int id, [FromBody] CompanyInput company)
     {
-        _companyService.UpdateCompany(id, company);
+        await _companyService.UpdateCompany(id, company);
         return Ok();
     }
 

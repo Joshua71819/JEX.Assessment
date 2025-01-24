@@ -14,7 +14,7 @@ public class JobPostingService : IJobPostingService
         _companyJobsDbContext = companyJobsDbContext;
     }
 
-    public int AddJobPosting(JobPostingInput jobPostingInput)
+    public async Task<int> AddJobPosting(JobPostingInput jobPostingInput)
     {
         var jobPosting = new JobPosting
         {
@@ -29,13 +29,13 @@ public class JobPostingService : IJobPostingService
         };
 
         _companyJobsDbContext.JobPostings.Add(jobPosting);
-        _companyJobsDbContext.SaveChanges();
+        await _companyJobsDbContext.SaveChangesAsync();
 
         return jobPosting.Id;
     }
 
-    public JobPostingDetail GetJobPostingDetail(int id) =>
-        _companyJobsDbContext.JobPostings
+    public async Task<JobPostingDetail> GetJobPostingDetail(int id) =>
+        await _companyJobsDbContext.JobPostings
             .Where(jp => jp.Id == id)
             .Select(jp => new JobPostingDetail
             {
@@ -48,11 +48,11 @@ public class JobPostingService : IJobPostingService
                 MinMonthlySalary = jp.MinMonthlySalary,
                 MaxMonthlySalary = jp.MaxMonthlySalary,
             })
-        .FirstOrDefault() ?? throw new InvalidOperationException($"Posting with Id {id} does not exists");
+        .FirstOrDefaultAsync() ?? throw new InvalidOperationException($"Posting with Id {id} does not exists");
 
-    public void UpdateJobPosting(int id, JobPostingInput jobPostingInput)
+    public async Task UpdateJobPosting(int id, JobPostingInput jobPostingInput)
     {
-        var jobPosting = _companyJobsDbContext.JobPostings.Find(id) ??
+        var jobPosting = await _companyJobsDbContext.JobPostings.FindAsync(id) ??
            throw new InvalidOperationException($"Posting with Id {id} does not exists");
 
         jobPosting.Title = jobPostingInput.Title;
@@ -62,24 +62,22 @@ public class JobPostingService : IJobPostingService
         jobPosting.MinMonthlySalary = jobPostingInput.MinMonthlySalary;
         jobPosting.MaxMonthlySalary = jobPostingInput.MaxMonthlySalary;
 
-        _companyJobsDbContext.SaveChanges();
+        await _companyJobsDbContext.SaveChangesAsync();
     }
 
-    public void SetStatus(int id, bool isActive)
+    public async Task SetStatus(int id, bool isActive)
     {
-        var jobPosting = _companyJobsDbContext.JobPostings.Find(id) ??
+        var jobPosting = await _companyJobsDbContext.JobPostings.FindAsync(id) ??
             throw new InvalidOperationException($"Posting with Id {id} does not exists");
 
         jobPosting.IsActive = isActive;
-        _companyJobsDbContext.SaveChanges();
-
+        await _companyJobsDbContext.SaveChangesAsync();
     }
 
-    public void DeleteJobPosting(int id) =>
-
-        _companyJobsDbContext.JobPostings
+    public async Task DeleteJobPosting(int id) =>
+        await _companyJobsDbContext.JobPostings
             .Where(c => c.Id == id)
-            .ExecuteDelete();
+            .ExecuteDeleteAsync();
 }
 
 
